@@ -560,8 +560,9 @@ namespace AddressBookPractice
 
         }
 
-        
-        //---------alternate method to read from csv file---------
+
+        //alternate way to read from csv file
+
         //public static void ReadFromCsvFile()
         //{
         //    string path = @"C:\Users\ishaa\source\repos\ConceptPractice\AssignmentPractice\AddressBookPractice\AddressBookPractice\Utility\AddressBookWriteFile.csv";
@@ -579,7 +580,51 @@ namespace AddressBookPractice
 
         //}
 
-        
+
+        public void WriteToJsonFile()
+        {
+            string path = @"C:\Users\ishaa\source\repos\ConceptPractice\AssignmentPractice\AddressBookPractice\AddressBookPractice\AddressBookJsonFile.json";
+            JsonSerializer serializer = new JsonSerializer();
+            using (StreamWriter sw = new StreamWriter(path))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                List<Contact> storeAllContacts = new List<Contact>();
+                foreach(List<Contact> item in addressBooksMap.Values)
+                {
+                    foreach(Contact element in item)
+                    {
+                        storeAllContacts.Add(element);
+                    }
+                }
+                serializer.Serialize(writer, storeAllContacts);
+                
+                // for ease :- convert target object to json string and then write that json string to json file
+                //serializer, sw, writer are not required in this case. just need the object
+                
+                //var json = JsonConvert.SerializeObject(storeAllContacts);
+                //File.WriteAllText(path, json);
+            }
+        }
+
+        public static void ReadFromJsonFile()
+        {
+            string path = @"C:\Users\ishaa\source\repos\ConceptPractice\AssignmentPractice\AddressBookPractice\AddressBookPractice\AddressBookJsonFile.json";
+
+            
+            using(StreamReader sr = new StreamReader(path))
+            {
+                string json = sr.ReadToEnd();
+                var jsonfile = JsonConvert.DeserializeObject<List<Contact>>(json);
+
+                foreach(Contact item in jsonfile)
+                {
+                    Console.WriteLine(item.ToString());
+                    Console.WriteLine("--------------------------");
+                }
+            }
+
+
+        }
 
     }
 }
